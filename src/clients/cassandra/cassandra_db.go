@@ -2,22 +2,21 @@ package cassandra
 
 import (
 	"github.com/gocql/gocql"
-	"log"
 )
+
+var session *gocql.Session
 
 func init() {
 	cluster := gocql.NewCluster("localhost")
 	cluster.Keyspace = "oauth"
 	cluster.Consistency = gocql.Quorum
-	session, err := cluster.CreateSession()
 
-	if err != nil {
+	var err error
+	if session, err = cluster.CreateSession(); err != nil {
 		panic(err)
 	}
-	log.Println("Cassandra db loaded successfully")
-	defer session.Close()
 }
 
-func RunCassandra() {
-	log.Println("logged")
+func GetSession() *gocql.Session {
+	return session
 }
